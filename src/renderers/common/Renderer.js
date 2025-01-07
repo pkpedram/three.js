@@ -209,8 +209,8 @@ class Renderer {
 		this.stencil = stencil;
 
 		/**
-		 * Holds a series of statistical information about the graphics board memory
-		 * and the rendering process. Useful for debugging or monitoring.
+		 * Holds a series of statistical information about the GPU memory
+		 * and the rendering process. Useful for debugging and monitoring.
 		 *
 		 * @type {Boolean}
 		 */
@@ -414,7 +414,7 @@ class Renderer {
 		 * @type {QuadMesh}
 		 */
 		this._quad = new QuadMesh( new NodeMaterial() );
-		this._quad.material.type = 'Renderer_output';
+		this._quad.material.name = 'Renderer_output';
 
 		/**
 		 * A reference to the current render context.
@@ -1844,7 +1844,7 @@ class Renderer {
 
 			const renderTargetData = this._textures.get( renderTarget );
 
-			renderContext = this._renderContexts.get( null, null, renderTarget );
+			renderContext = this._renderContexts.getForClear( renderTarget );
 			renderContext.textures = renderTargetData.textures;
 			renderContext.depthTexture = renderTargetData.depthTexture;
 			renderContext.width = renderTargetData.width;
@@ -2795,7 +2795,7 @@ class Renderer {
 
 			renderBundleData.renderObjects.push( renderObject );
 
-			renderObject.bundle = this._currentRenderBundle.scene;
+			renderObject.bundle = this._currentRenderBundle.bundleGroup;
 
 		}
 
@@ -2806,7 +2806,7 @@ class Renderer {
 	}
 
 	/**
-	 * A different implementation for `_handleObjectFunction` which only creates the creates the render object pipeline.
+	 * A different implementation for `_handleObjectFunction` which only makes sure the object is ready for rendering.
 	 * Used in `compileAsync()`.
 	 *
 	 * @private
